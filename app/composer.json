@@ -1,0 +1,13 @@
+{
+    "name": "vladimir-s/sample-project",
+    "description": "sample project",
+    "type": "project",
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Sample\\": "src/"
+        }
+    }
+}

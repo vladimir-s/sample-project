@@ -3,7 +3,9 @@
     "description": "sample project",
     "type": "project",
     "require": {
-        "php": ">=7.0.0"
+        "php": ">=7.0.0",
+        "symfony/http-foundation": "^3.2",
+        "nikic/fast-route": "^1.2"
     },
     "autoload": {
         "psr-4": {

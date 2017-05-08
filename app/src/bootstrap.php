@@ -1,18 +1,18 @@
 <?php
+declare(strict_types = 1);
+
 namespace Sample;
 
 use FastRoute\Dispatcher;
 use FastRoute\RouteCollector;
 use function FastRoute\simpleDispatcher;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$request = Request::createFromGlobals();
+$injector = require 'dependencies.php';
 
-$response = Response::create();
-//$content, Response::HTTP_OK, ['content-type' => 'text/html']
+$request = $injector->make('Symfony\Component\HttpFoundation\Request');
+$response = $injector->make('Symfony\Component\HttpFoundation\Response');
 
 $dispatcher = simpleDispatcher(function(RouteCollector $r) {
     $routes = include('routes.php');
@@ -36,9 +36,11 @@ switch ($routeInfo[0]) {
         $response->setStatusCode(405);
         break;
     case Dispatcher::FOUND:
-        $handler = $routeInfo[1];
+        $className = $routeInfo[1][0];
+        $method = $routeInfo[1][1];
         $vars = $routeInfo[2];
-        call_user_func($handler, $vars);
+        $class = $injector->make($className);
+        $class->$method($vars);
         break;
 }
 
